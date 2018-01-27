@@ -1,0 +1,87 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      美心西饼
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <!--logo-->
+    <ion-item  style="padding: 0">
+      <img src="../../assets/imgs/201707181448325969790.jpg" alt=""/>
+      <div>
+        <button ion-button style="float: right; background: #e16300;" (click)="pushPage('LoginPage')">登录</button>
+        <button ion-button style="float: right;background: #e16300;" (click)="pushPage('RegisterPage')">注册</button>
+      </div>
+
+    </ion-item>
+
+
+    <!--轮播图-->
+    <ion-item  style="padding: 0 margin:0 auto">
+      <ion-slides pager autoplay=2000 loop=true speed=2000 effect='cube' paginationType='fraction' *ngIf="len >=1">
+
+        <ion-slide *ngFor="let key of indexlunbo">
+          <button block class="lunbo" (click)="gotodetails(key.pid)">
+            <img src="../../assets/imgs/{{key.superimg}}" alt=""/>
+          </button>
+        </ion-slide>
+      </ion-slides>
+    </ion-item>
+
+  </ion-list>
+    <!--图片导航分类-->
+
+
+      <ion-fab right middle large>
+        <button ion-fab color="light"><ion-icon name="arrow-dropleft" large></ion-icon></button>
+        <ion-fab-list side="top">
+          <button ion-fab (click)="pushPage('CakeListPage')">蛋糕</button>
+        </ion-fab-list>
+        <ion-fab-list side="left">
+          <button ion-fab (click)="pushPage('DesertListPage')">零食</button>
+        </ion-fab-list>
+          <ion-fab-list side="bottom">
+            <button ion-fab>顶部</button>
+          </ion-fab-list>
+      </ion-fab>
+
+
+
+
+
+    <!--商品卡片展示-->
+      <ion-card *ngFor="let key of indexproduct">
+        <img src="../../assets/imgs/{{key.limg}}"/>
+        <ion-card-content>
+          <ion-card-title>
+            {{key.title}}
+          </ion-card-title>
+          <p style="display: flex;flex-wrap: wrap;font-size: 12px">
+            {{key.subtitle}}
+          </p>
+          <p>
+            <span style="font-size: 2rem;font-weight: bold;color:#e16300">¥{{key.nprice}}</span>&nbsp;&nbsp;<span style="text-decoration: line-through">¥{{key.mprice}}</span>
+          </p>
+          <button  ion-button full class="indexbtn" (click)="gotodetails(key.pid)">进去看看</button>
+        </ion-card-content>
+      </ion-card>
+
+
+
+</ion-content>
+
+<!--底部-->
+<ion-footer>
+  <ion-toolbar>
+    <ion-grid>
+      <ion-row>
+        <ion-col col-4><button ion-button  style="background: #e16300;" (click)="pushPage('CartPage')"><ion-icon name="cart"></ion-icon>购物车</button></ion-col>
+        <ion-col col-4><button ion-button  style="background: #e16300;" (click)="pushPage('OrderPage')">我的订单</button></ion-col>
+        <ion-col col-4><button ion-button  style="background: #e16300;" (click)="pushPage('PersonalPage')">送货地址</button></ion-col>
+        </ion-row>
+      </ion-grid>
+  </ion-toolbar>
+</ion-footer>
