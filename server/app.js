@@ -32,6 +32,7 @@ app.all('*', function(req, res, next) {
   res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
   res.header("X-Powered-By",' 3.2.1');
   res.header("Content-Type", "application/json;charset=utf-8");
+  res.header('Access-Control-Allow-Credentials','true');
   next();
 });
 
@@ -96,20 +97,54 @@ app.get("/login",(req,res)=>{
   var upwd=req.query.upwd;
   pool.getConnection((err,conn)=>{
     if(err)throw err;
-    var sql="SELECT uid FROM mx_user WHERE uphone=? AND BINARY upwd=?";
+    var sql="SELECT uid,uphone FROM mx_user WHERE uphone=? AND BINARY upwd=?";
     conn.query(sql,[uphone,upwd],(err,result)=>{
       if(err)throw err;
       if(result.length>0){
         var uid=result[0].uid;
+        var uid=result[0].uphone;
         req.session.uid=uid;
-        console.log(req.session.uid);
-        res.json({code:1,msg:"登录成功"});
+        req.session.uphone=uphone;
+        res.json({code:1,msg:"登录成功",uid:result[0].uid});
       }else{
         res.json({code:-1,msg:"登录失败"})
       }
       conn.release();
     })
   })
+});
+app.get("/islogin",(req,res)=>{
+  if (req.session.uid) {//检查用户是否已经登录
+    res.json({code:1,msg:req.session.uphone});
+} else {
+  res.json({code:0});
+}
+//服务器端使用node能正确记住session状态，但用ionic记不住
+});
+app.get("/cakelist",(req,res)=>{
+  let pnum = parseInt(req.query.pnum);
+  let pagesize=12;
+  let page=(pnum-1)*pagesize;
+  let pagecount;
+  var sql = "SELECT mx_product.pid,mx_product.title,mx_product.mprice,mx_product.nprice,mx_product_pic.sbimg FROM mx_product,mx_product_pic WHERE mx_product.pid=mx_product_pic.pid AND mx_product.is_cake=1 AND mx_product.is_shop=1 LIMIT ?,?";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql, [page,pagesize], (err, result)=> {
+      if (err)throw err;
+      res.json({pnum:pnum,page:page,pagecount:pagecount,data:result});
+      conn.release();
+    })
+  })
+});
+app.get("/cakelist_count",(req,res)=>{
+  sql="SELECT COUNT(pid) FROM mx_product WHERE mx_product.is_cake=1 AND mx_product.is_shop=1";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql, (err, result)=> {
+      if (err)throw err;
+      res.json(result[0]);
+      conn.release();
+    })
+  })
+
 });
 
 

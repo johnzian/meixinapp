@@ -12,15 +12,16 @@
     <ion-item  style="padding: 0">
       <img src="../../assets/imgs/201707181448325969790.jpg" alt=""/>
       <div>
-        <button ion-button style="float: right; background: #e16300;" (click)="pushPage('LoginPage')">登录</button>
-        <button ion-button style="float: right;background: #e16300;" (click)="pushPage('RegisterPage')">注册</button>
+        <button ion-button style="float: right; background: #e16300;" (click)="pushPage('LoginPage')" *ngIf='!mylogin'>登录</button>
+        <button ion-button style="float: right;background: #e16300;" (click)="pushPage('RegisterPage')" *ngIf='!mylogin'>注册</button>
+        <p *ngIf='mylogin'>欢迎回来~{{uphone}}</p>
       </div>
 
     </ion-item>
 
 
     <!--轮播图-->
-    <ion-item  style="padding: 0 margin:0 auto">
+    <ion-item  style="padding: 0 ;margin:0 auto">
       <ion-slides pager autoplay=2000 loop=true speed=2000 effect='cube' paginationType='fraction' *ngIf="len >=1">
 
         <ion-slide *ngFor="let key of indexlunbo">
@@ -44,7 +45,7 @@
           <button ion-fab (click)="pushPage('DesertListPage')">零食</button>
         </ion-fab-list>
           <ion-fab-list side="bottom">
-            <button ion-fab>顶部</button>
+            <button ion-fab (click)="gotop()">顶部</button>
           </ion-fab-list>
       </ion-fab>
 

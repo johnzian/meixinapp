@@ -15,6 +15,7 @@ import {Http,Response} from '@angular/http';
   templateUrl: 'login.html'
 })
 export class LoginPage {
+  uid="";
   uphone="";
   upwd="";
   constructor(public navCtrl: NavController, public navParams: NavParams,public http:Http) {
@@ -28,7 +29,10 @@ export class LoginPage {
     let upwd=this.upwd;
     let url=`http://127.0.0.1:3000/login?uphone=${uphone}&upwd=${upwd}`;
     this.http.request(url).subscribe((res:Response)=>{
+
       if(res.json().code==1){
+        window.localStorage.setItem('uid',res.json().uid);
+        window.localStorage.setItem('uphone',this.uphone);
         this.navCtrl.push('HomePage');
       }else{
         alert("登录失败")
