@@ -16,17 +16,23 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col col-6>
-          <img src="../../assets/imgs/220_201709231016374215690.png"/>
-            <p style="font-size: 2rem">
-              3.9澳洲牛奶蛋糕（原味）
+      <ion-col col-6 *ngFor="let key of cakes" ion-item>
+          <img src="../../assets/imgs/{{key.sbimg}}"/>
+            <p style="font-size: 1rem">
+              {{key.title}}
             </p>
             <p>
-              <span style="font-size: 1.2rem;font-weight: bold;color:#e16300">¥148</span>&nbsp;&nbsp;<span style="text-decoration: line-through;font-size: 0.5rem">¥148</span>
+              <span style="font-size: 1.2rem;font-weight: bold;color:#e16300">¥{{key.nprice}}</span>&nbsp;&nbsp;<span style="text-decoration: line-through;font-size: 0.5rem">¥{{key.mprice}}</span>
             </p>
-            <button  ion-button round class="indexbtn" style="width: 100%">查看详情</button>
+            <button  ion-button round class="indexbtn" style="width: 100%" (click)="gotodetails(key.pid)">查看详情</button>
       </ion-col>
 
     </ion-row>
   </ion-grid>
+  <ion-infinite-scroll (ionInfinite)="doInfinite($event)" *ngIf="canload">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="加载中">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

@@ -125,12 +125,11 @@ app.get("/cakelist",(req,res)=>{
   let pnum = parseInt(req.query.pnum);
   let pagesize=12;
   let page=(pnum-1)*pagesize;
-  let pagecount;
   var sql = "SELECT mx_product.pid,mx_product.title,mx_product.mprice,mx_product.nprice,mx_product_pic.sbimg FROM mx_product,mx_product_pic WHERE mx_product.pid=mx_product_pic.pid AND mx_product.is_cake=1 AND mx_product.is_shop=1 LIMIT ?,?";
   pool.getConnection((err, conn)=> {
     conn.query(sql, [page,pagesize], (err, result)=> {
       if (err)throw err;
-      res.json({pnum:pnum,page:page,pagecount:pagecount,data:result});
+      res.json({pnum:pnum,page:page,data:result});
       conn.release();
     })
   })
