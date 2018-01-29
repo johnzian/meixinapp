@@ -43,6 +43,7 @@ app.listen(3000);
 app.get('/',(req,res)=>{
     res.end("server on")
 });
+//首页产品
 app.get('/indexproduct',(req,res)=>{
     var sql="SELECT mx_index_cake.pid,mx_product.subtitle,mx_product_pic.limg,mx_product.title,mx_product.mprice,mx_product.nprice FROM (mx_index_cake,mx_product) JOIN mx_product_pic ON (mx_index_cake.pid=mx_product_pic.pid) WHERE mx_index_cake.pid=mx_product.pid AND mx_index_cake.display=1";
     pool.getConnection((err,conn)=> {
@@ -53,6 +54,7 @@ app.get('/indexproduct',(req,res)=>{
         })
     })
 });
+//轮播产品
 app.get('/lunbo',(req,res)=>{
   var sql="select pid,superimg from mx_index_lunbo where display=1";
   pool.getConnection((err,conn)=> {
@@ -63,6 +65,7 @@ app.get('/lunbo',(req,res)=>{
     })
   })
 });
+//获得产品详情
 app.get('/getproduct',(req,res)=> {
   let pid = parseInt(req.query.pid);
   var sql = "SELECT mx_product.pid,mx_product.title,mx_product.is_cake," +
@@ -76,7 +79,7 @@ app.get('/getproduct',(req,res)=> {
     })
   })
 });
-
+//注册功能
   app.get('/register', (req, res)=> {
     let uphone = req.query.uphone;
     let upwd = req.query.upwd;
@@ -92,6 +95,7 @@ app.get('/getproduct',(req,res)=> {
       })
     })
   });
+  //登录功能
 app.get("/login",(req,res)=>{
   var uphone=req.query.uphone;
   var upwd=req.query.upwd;
@@ -113,6 +117,7 @@ app.get("/login",(req,res)=>{
     })
   })
 });
+//检测是否登录，但没有用
 app.get("/islogin",(req,res)=>{
   if (req.session.uid) {//检查用户是否已经登录
     res.json({code:1,msg:req.session.uphone});
@@ -121,6 +126,7 @@ app.get("/islogin",(req,res)=>{
 }
 //服务器端使用node能正确记住session状态，但用ionic记不住
 });
+//蛋糕页面产品
 app.get("/cakelist",(req,res)=>{
   let pnum = parseInt(req.query.pnum);
   let pagesize=12;
@@ -134,12 +140,31 @@ app.get("/cakelist",(req,res)=>{
     })
   })
 });
+//蛋糕页面总数
 app.get("/cakelist_count",(req,res)=>{
   sql="SELECT COUNT(pid) FROM mx_product WHERE mx_product.is_cake=1 AND mx_product.is_shop=1";
   pool.getConnection((err, conn)=> {
     conn.query(sql, (err, result)=> {
       if (err)throw err;
       res.json(result[0]);
+      conn.release();
+    })
+  })
+});
+//加入购物车
+app.get("/addcart",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  let pid = parseInt(req.query.pid);
+  let count = parseInt(req.query.count);
+  sql="INSERT INTO mx_cart(uid,pid,count) VALUES(?,?,?)";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid,pid,count],(err, result)=> {
+      if (err){
+        throw err;
+        res.send({"status": "bad"});
+      }else{
+        res.send({"status": "ok"});
+      }
       conn.release();
     })
   })

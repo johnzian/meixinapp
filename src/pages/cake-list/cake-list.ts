@@ -20,8 +20,8 @@ export class CakeListPage {
   pnum:number=1;
   totalpage=0;
   canload=true;
-  items=[];
   ionViewWillEnter(){
+    //首次运行，必先运行一次函数，还有获得总页数,设定了每一页都为12个产品
     this.loaddata();
     this.http.request('http://127.0.0.1:3000/cakelist_count').subscribe((res:Response)=>{
       this.productcount=res.json()["COUNT(pid)"];
@@ -29,15 +29,14 @@ export class CakeListPage {
     });
   }
   constructor(public navCtrl: NavController, public navParams: NavParams,public http:Http) {
-    for (let i = 0; i < 30; i++) {
-      this.items.push( this.items.length );
-    }
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CakeListPage');
   }
   loaddata(){
+    //获得分页产品的数据
     this.http.request('http://127.0.0.1:3000/cakelist?pnum='+this.pnum).subscribe((res:Response)=>{
       for(let i=0;i<res.json().data.length;i++){
       this.cakes.push(res.json().data[i]);
@@ -48,7 +47,7 @@ export class CakeListPage {
     this.navCtrl.push("ProductdetailsPage",{pid:pid})
   }
   doInfinite(infiniteScroll) {
-
+//每拉动一次就运行一次函数
     setTimeout(() => {
       if(this.pnum<this.totalpage){
         this.pnum++;
@@ -57,7 +56,7 @@ export class CakeListPage {
         this.canload=false;
       }
       infiniteScroll.complete();
-    }, 500);
+    }, 1000);
   }
 
 }

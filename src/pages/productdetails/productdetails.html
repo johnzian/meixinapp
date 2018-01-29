@@ -30,8 +30,10 @@
       </p>
       <div>磅数：{{productdetails.pound}}</div>
       <div >口味：{{productdetails.taste}}</div>
-      <ion-item><ion-label floating>数量：</ion-label><ion-input value="1"></ion-input></ion-item>
+      <ion-item>
+        <ion-label>数量：</ion-label><ion-input value="1" [(ngModel)]="count"></ion-input>
+      </ion-item>
   </ion-list>
-      <button  ion-button full class="indexbtn">加入购物车</button>
+      <button  ion-button full class="indexbtn" (click)="show()">加入购物车</button>
 
 </ion-content>

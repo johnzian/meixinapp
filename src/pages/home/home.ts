@@ -18,22 +18,20 @@ export class HomePage {
   len:Number;//控制轮播
   mylogin=false;
   uphone="";
-  uid="";
-  ionViewDidLoad(){
-    if(this.uid!=""){
-      this.mylogin=true;
-    }
-  }
+  uid=0;
   ionViewWillEnter(){
-    this.http.request('http://127.0.0.1:3000/indexproduct').subscribe((res:Response)=>{
+    this.http.request('http://127.0.0.1:3000/indexproduct').subscribe((res:Response)=>{//首页产品载入
       this.indexproduct=res.json();
     });
-    this.http.request('http://127.0.0.1:3000/lunbo').subscribe((res:Response)=>{
+    this.http.request('http://127.0.0.1:3000/lunbo').subscribe((res:Response)=>{//轮播载入
       this.indexlunbo=res.json();
       this.len=this.indexlunbo.length;
     });
-    this.uphone=window.localStorage.getItem('uphone');
-    this.uid=window.localStorage.getItem('uid');
+    if(window.localStorage.getItem('uid')){//检测是否有登录
+      this.uid=parseInt(window.localStorage.getItem('uid'));
+      this.uphone=window.localStorage.getItem('uphone');
+      this.mylogin=true;
+    }
     // this.http.request('http://127.0.0.1:3000/islogin').subscribe((res:Response)=>{
     //   if(res.json().code=1){
     //     this.islogin=true;

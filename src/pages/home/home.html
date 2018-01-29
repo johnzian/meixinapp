@@ -12,9 +12,13 @@
     <ion-item  style="padding: 0">
       <img src="../../assets/imgs/201707181448325969790.jpg" alt=""/>
       <div>
+        <ion-item *ngIf='!mylogin'>
         <button ion-button style="float: right; background: #e16300;" (click)="pushPage('LoginPage')" *ngIf='!mylogin'>登录</button>
         <button ion-button style="float: right;background: #e16300;" (click)="pushPage('RegisterPage')" *ngIf='!mylogin'>注册</button>
+      </ion-item>
+      <ion-item *ngIf='mylogin'>
         <p *ngIf='mylogin'>欢迎回来~{{uphone}}</p>
+      </ion-item>
       </div>
 
     </ion-item>
