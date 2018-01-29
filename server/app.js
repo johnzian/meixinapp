@@ -168,7 +168,22 @@ app.get("/addcart",(req,res)=>{
       conn.release();
     })
   })
-
+});
+//输出用户购物车
+app.get("/showcart",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  sql="SELECT mx_cart.pid,mx_cart.count,mx_cart.cid,mx_cart.bless,mx_product.title,mx_product.pound,mx_product.taste,mx_product.nprice,mx_product_pic.simg FROM mx_cart,mx_product,mx_product_pic WHERE mx_cart.uid=? AND mx_cart.pid=mx_product.pid AND mx_cart.pid=mx_product_pic.pid";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid],(err, result)=> {
+      if (err){
+        throw err;
+        res.send({"status": "bad"});
+      }else{
+        res.json(result);
+      }
+      conn.release();
+    })
+  })
 });
 
 

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
+import {Http,Response} from '@angular/http';
 
 /**
  * Generated class for the CartPage page.
@@ -14,12 +15,31 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'cart.html',
 })
 export class CartPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  uid=0;
+  cartproduct=[];
+  constructor(public navCtrl: NavController, public navParams: NavParams,public http:Http,private alertCtrl: AlertController) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CartPage');
+  ionViewWillEnter(){
+    if(window.localStorage.getItem('uid')){//检测是否登录
+      this.uid=parseInt(window.localStorage.getItem('uid'));
+      this.http.request('http://127.0.0.1:3000/showcart?uid='+this.uid).subscribe((res:Response)=>{
+      this.cartproduct=res.json();
+    });
+    }else{
+      let alert = this.alertCtrl.create({
+        title: '请先登录',
+        buttons: [
+          {
+            text: '现去登录',
+            handler: () => {
+              this.navCtrl.push("LoginPage")
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
   }
 
 }
