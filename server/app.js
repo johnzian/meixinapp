@@ -151,6 +151,31 @@ app.get("/cakelist_count",(req,res)=>{
     })
   })
 });
+//零食页面产品
+app.get("/desertlist",(req,res)=>{
+  let pnum = parseInt(req.query.pnum);
+  let pagesize=12;
+  let page=(pnum-1)*pagesize;
+  var sql = "SELECT mx_product.pid,mx_product.title,mx_product.mprice,mx_product.nprice,mx_product_pic.sbimg FROM mx_product,mx_product_pic WHERE mx_product.pid=mx_product_pic.pid AND mx_product.is_desert=1 AND mx_product.is_shop=1 LIMIT ?,?";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql, [page,pagesize], (err, result)=> {
+      if (err)throw err;
+      res.json({pnum:pnum,page:page,data:result});
+      conn.release();
+    })
+  })
+});
+//零食页面总数
+app.get("/desertlist_count",(req,res)=>{
+  sql="SELECT COUNT(pid) FROM mx_product WHERE mx_product.is_desert=1 AND mx_product.is_shop=1";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql, (err, result)=> {
+      if (err)throw err;
+      res.json(result[0]);
+      conn.release();
+    })
+  })
+});
 //加入购物车
 app.get("/addcart",(req,res)=>{
   let uid = parseInt(req.query.uid);
@@ -172,7 +197,7 @@ app.get("/addcart",(req,res)=>{
 //输出用户购物车
 app.get("/showcart",(req,res)=>{
   let uid = parseInt(req.query.uid);
-  sql="SELECT mx_cart.pid,mx_cart.count,mx_cart.cid,mx_cart.bless,mx_product.title,mx_product.pound,mx_product.taste,mx_product.nprice,mx_product_pic.simg FROM mx_cart,mx_product,mx_product_pic WHERE mx_cart.uid=? AND mx_cart.pid=mx_product.pid AND mx_cart.pid=mx_product_pic.pid";
+  sql="SELECT mx_cart.pid,mx_cart.count,mx_cart.cid,mx_cart.bless,mx_product.title,mx_product.pound,mx_product.taste,mx_product.nprice,mx_product_pic.limg FROM mx_cart,mx_product,mx_product_pic WHERE mx_cart.uid=? AND mx_cart.pid=mx_product.pid AND mx_cart.pid=mx_product_pic.pid";
   pool.getConnection((err, conn)=> {
     conn.query(sql,[uid],(err, result)=> {
       if (err){
@@ -180,6 +205,75 @@ app.get("/showcart",(req,res)=>{
         res.send({"status": "bad"});
       }else{
         res.json(result);
+      }
+      conn.release();
+    })
+  })
+});
+//删除购物车
+app.get("/deletecart",(req,res)=>{
+  let cid = parseInt(req.query.cid);
+  let uid = parseInt(req.query.uid);
+  sql="DELETE  FROM mx_cart where cid=? AND uid=?";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[cid,uid],(err, result)=> {
+      if (err){
+        throw err;
+        res.send({"status": "bad"});
+      }else{
+        res.send({"status": "ok"});
+      }
+      conn.release();
+    })
+  })
+});
+//更新购物车单独商品数量
+app.get("/updatecart",(req,res)=>{
+  let count = parseInt(req.query.count);
+  let cid = parseInt(req.query.cid);
+  let uid = parseInt(req.query.uid);
+  sql="UPDATE mx_cart set mx_cart.count=? where cid=? AND uid=?";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[count,cid,uid],(err, result)=> {
+      if (err){
+        throw err;
+        res.send({"status": "bad"});
+      }else{
+        res.send({"status": "ok"});
+      }
+      conn.release();
+    })
+  })
+});
+//获得用户送货地址
+app.get("/showaddress",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  sql="SELECT * FROM mx_address WHERE uid=?";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid],(err, result)=> {
+      if (err){
+        throw err;
+      }else{
+        res.json(result);
+      }
+      conn.release();
+    })
+  })
+});
+//加入订单
+app.get("/addorder",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  let aid = parseInt(req.query.aid);
+  let pid = parseInt(req.query.pid);
+  let count = parseInt(req.query.count);
+  sql="INSERT INTO mx_order (uid,aid,pid,count) VALUES(?,?,?,?)";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid,aid,pid,count],(err, result)=> {
+      if (err){
+        throw err;
+        res.send({"status": "bad"});
+      }else{
+        res.send({"status": "ok"});
       }
       conn.release();
     })

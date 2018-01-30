@@ -14,36 +14,47 @@
 
 
 <ion-content padding>
-  <ion-list>
-    <ion-item-sliding *ngFor="let key of cartproduct">
-      <ion-item>
-        <ion-checkbox  checked="false" item-start></ion-checkbox>
-        <ion-thumbnail item-start>
-          <img src="../../assets/imgs/{{key.simg}}">
-        </ion-thumbnail>
-        <ion-label>{{key.title}}</ion-label>
-        <ion-label item-end>数量：{{key.count}} </ion-label>
 
-      </ion-item>
-      <ion-item-options side="right">
-        <button ion-button color="primary">
-          <ion-icon name="remove"></ion-icon>
-          减少
-        </button>
-        <button ion-button color="secondary">
-          <ion-icon name="add"></ion-icon>
+  <ion-card *ngFor="let key of cartproduct">
+
+    <img src="../../assets/imgs/{{key.limg}}"/>
+
+    <ion-card-content>
+      <ion-card-title>
+        {{key.title}}
+      </ion-card-title>
+      <p>
+        总价格：{{key.nprice*key.count}}
+      </p>
+      <p>数量：{{key.count}}</p>
+    </ion-card-content>
+
+    <ion-row no-padding>
+      <ion-col>
+        <button ion-button  small style="background: #e16300;" (click)="addproduct(key.cid,key.count)" icon-start>
+          <ion-icon name='add'></ion-icon>
           增加
         </button>
-        <button ion-button color="primary">
-          <ion-icon name="trash"></ion-icon>
+      </ion-col>
+      <ion-col text-center>
+        <button ion-button small style="background: #e16300;" (click)="reduceproduct(key.cid,key.count)" icon-start>
+          <ion-icon name='remove'></ion-icon>
+          减少
+        </button>
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button small style="background: #e16300;" icon-start (click)="deletecart(key.cid)">
+          <ion-icon name='trash'></ion-icon>
           删除
         </button>
-      </ion-item-options>
-    </ion-item-sliding>
-  </ion-list>
+      </ion-col>
+      <button  ion-button full style="background: #e16300;" (click)="addorder(key.pid,key.count,key.cid)">结算</button>
+    </ion-row>
+
+  </ion-card>
 </ion-content>
 <ion-footer>
 
-    <button  ion-button full style="background: #e16300;">结算</button>
+    
 
 </ion-footer>

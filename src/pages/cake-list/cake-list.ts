@@ -32,9 +32,7 @@ export class CakeListPage {
 
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad CakeListPage');
-  }
+
   loaddata(){
     //获得分页产品的数据
     this.http.request('http://127.0.0.1:3000/cakelist?pnum='+this.pnum).subscribe((res:Response)=>{
