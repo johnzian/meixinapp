@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams,AlertController } from 'ionic-angular';
+import {Http,Response} from '@angular/http';
 
 /**
  * Generated class for the OrderPage page.
@@ -11,15 +12,40 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-order',
-  templateUrl: 'order.html',
+  templateUrl: 'order.html'
 })
 export class OrderPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  uid=0;
+  orders=[];
+  constructor(public navCtrl: NavController,
+     public navParams: NavParams,
+     public http:Http,
+     private alertCtrl: AlertController) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad OrderPage');
+  ionViewWillEnter(){
+    this.loaddata();
   }
-
+  loaddata(){
+    this.orders=[];
+    if(window.localStorage.getItem('uid')){//检测是否登录
+      this.uid=parseInt(window.localStorage.getItem('uid'));
+      this.http.request('http://127.0.0.1:3000/showorder?uid='+this.uid).subscribe((res:Response)=>{
+      this.orders=res.json();
+      });
+    }else{
+      let alert = this.alertCtrl.create({
+        title: '请先登录',
+        buttons: [
+          {
+            text: '现去登录',
+            handler: () => {
+              this.navCtrl.push("LoginPage")
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+  }
 }

@@ -88,43 +88,49 @@ export class CartPage {
   }
   addorder(pid,count,cid){    
     this.http.request('http://127.0.0.1:3000/showaddress?uid='+this.uid).subscribe((res:Response)=>{
-      let alert = this.alertCtrl.create({
-        title: '选择送货地址',
-        buttons: [
-          {
-            text: '取消',
-            role: 'cancel'
-          },
-          {
-            text: '购买',
-            handler: data => {
-              //获取的data就是用户所选的地址的aid
-              var aid=data;
-              //加入订单表并且会删除原定的购物车产品
-              this.http.request('http://127.0.0.1:3000/addorder?uid='+this.uid+'&aid='+aid+'&pid='+pid+'&count='+count).subscribe((res:Response)=>{
-                if(res.json().status=="ok"){
-                  this.deletecart(cid);//删除原来的购物车产品
-                  let toast=this.toastCtrl.create({//弹出吐司购买成功
-                    message:'购买成功',
-                    position:'middle',
-                    showCloseButton:true
-                  });
-                  toast.present();
-                }
-              });
+      if(res.json().status=="bad"){//如果没有送货地址
+          alert("请先写送货地址");
+          this.navCtrl.push("PersonalPage");
+      }else{
+        let alert = this.alertCtrl.create({
+          title: '选择送货地址',
+          buttons: [
+            {
+              text: '取消',
+              role: 'cancel'
+            },
+            {
+              text: '购买',
+              handler: data => {
+                //获取的data就是用户所选的地址的aid
+                var aid=data;
+                //加入订单表并且会删除原定的购物车产品
+                this.http.request('http://127.0.0.1:3000/addorder?uid='+this.uid+'&aid='+aid+'&pid='+pid+'&count='+count).subscribe((res:Response)=>{
+                  if(res.json().status=="ok"){
+                    this.deletecart(cid);//删除原来的购物车产品
+                    let toast=this.toastCtrl.create({//弹出吐司购买成功
+                      message:'购买成功',
+                      position:'middle',
+                      showCloseButton:true
+                    });
+                    toast.present();
+                  }
+                });
+              }
             }
-          }
-        ]
-      });
-      //把用户的地址栏打印出来
-      for(let i=0;i<res.json().length;i++){
-        alert.addInput({
-          type: 'radio',
-          label: res.json()[i].details,
-          value: res.json()[i].aid
+          ]
         });
+        //把用户的地址栏打印出来
+        for(let i=0;i<res.json().length;i++){
+          alert.addInput({
+            type: 'radio',
+            label: res.json()[i].details,
+            value: res.json()[i].aid
+          });
+        }
+        alert.present();
       }
-      alert.present();
     });
   }
+  
 }

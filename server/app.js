@@ -253,6 +253,7 @@ app.get("/showaddress",(req,res)=>{
     conn.query(sql,[uid],(err, result)=> {
       if (err){
         throw err;
+        res.send({"status": "bad"});
       }else{
         res.json(result);
       }
@@ -279,7 +280,60 @@ app.get("/addorder",(req,res)=>{
     })
   })
 });
-
+//输出用户的订单
+app.get("/showorder",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  sql="SELECT mx_product_pic.simg,mx_product.title,mx_order.count,mx_address.details FROM mx_order,mx_product,mx_product_pic,mx_address WHERE mx_order.uid=? AND mx_order.pid=mx_product.pid AND mx_order.pid=mx_product_pic.pid AND mx_address.aid=mx_order.aid";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid],(err, result)=> {
+      if (err){
+        throw err;
+      }else{
+        res.json(result);
+      }
+      conn.release();
+    })
+  })
+});
+//输出用户送货地址
+app.get("/showaddress",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  sql="SELECT aid,receiver,province,city,block,phone,homenumber,postcode,details FROM `mx_address` WHERE uid=?";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid],(err, result)=> {
+      if (err){
+        throw err;
+      }else{
+        res.json(result);
+      }
+      conn.release();
+    })
+  })
+});
+//添加用户送货地址
+app.get("/addaddress",(req,res)=>{
+  let uid = parseInt(req.query.uid);
+  let receiver = req.query.receiver;
+  let province = req.query.province;
+  let city = req.query.city;
+  let block = req.query.block;
+  let phone = parseInt(req.query.phone);
+  let homenumber = parseInt(req.query.homenumber);
+  let postcode = parseInt(req.query.postcode);
+  let details = req.query.details;
+  sql="INSERT INTO mx_address (uid,receiver,province,city,block,phone,homenumber,postcode,details) VALUES (?,?,?,?,?,?,?,?,?)";
+  pool.getConnection((err, conn)=> {
+    conn.query(sql,[uid,receiver,province,city,block,phone,homenumber,postcode,details],(err, result)=> {
+      if (err){
+        throw err;
+        res.send({"status": "bad"});
+      }else{
+        res.send({"status": "ok"});
+      }
+      conn.release();
+    })
+  })
+});
 
 
 

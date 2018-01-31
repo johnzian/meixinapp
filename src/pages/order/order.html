@@ -14,16 +14,16 @@
 
 
 <ion-content padding>
-  <ion-list>
-      <ion-item>
-        <ion-thumbnail item-start>
-          <img src="../../assets/imgs/220_201707302319317532290.png">
-        </ion-thumbnail>
-        <ion-label>熊孩子</ion-label>
-        <ion-label item-end>数量：1 </ion-label>
-      </ion-item>
+  <ion-card *ngFor="let key of orders">
     <ion-item>
-      订单地址：sadsadasdas
+      <ion-avatar item-start>
+        <img src="../../assets/imgs/{{key.simg}}">
+      </ion-avatar>
+      <h3>{{key.title}}</h3>
+      <p>数量：{{key.count}} </p>
     </ion-item>
-  </ion-list>
+    <ion-card-content>
+      <p>订单地址：{{key.details}}</p>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>personal</ion-title>
+    <ion-title>送货地址</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -16,15 +16,20 @@
 <ion-content padding>
   <div style="margin: 10px">
 
-    <div>
-      <p>收件人：猫猫</p>
-      <p>地址：广东省广州市海珠区</p>
-      <p>电话：13711163602</p>
-      <p>固定电话：84230505</p>
-      <p>邮政编号：510220</p>
-      <p>详细地址：广东省古桑州市还是住我去sadsadasdsaaaaaaaaaa</p>
-      <button ion-button full>删除</button>
+    <div *ngFor="let key of address">
+      <p>收件人：{{key.receiver}}</p>
+      <p>地址：{{key.province}}{{key.city}}{{key.block}}</p>
+      <p>电话：{{key.phone}}</p>
+      <p>固定电话：{{key.homenumber}}</p>
+      <p>邮政编号：{{key.postcode}}</p>
+      <p>详细地址：{{key.details}}</p>
+      <br>
     </div>
 
   </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar>
+    <button ion-button full style="background: #e16300;" (click)="addAddress()">添加收货地址</button>
+  </ion-toolbar>
+</ion-footer>
