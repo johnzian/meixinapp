@@ -31,8 +31,8 @@ export class CartPage {
   }
   //删除购物车商品
   deletecart(cid){
-    this.http.request('http://127.0.0.1:3000/deletecart?cid='+cid+'&uid='+this.uid).subscribe((res:Response)=>{
-      if(res.json().status=="ok"){
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/delete_cart.php?cid='+cid+'&uid='+this.uid).subscribe((res:Response)=>{
+      if(res.json()==1){
         this.loaddata();
       }else{
         alert("失败");
@@ -42,9 +42,9 @@ export class CartPage {
   //获取用户的购物车信息
   loaddata(){
     this.cartproduct=[];
-    if(window.localStorage.getItem('uid')){//检测是否登录
-      this.uid=parseInt(window.localStorage.getItem('uid'));
-      this.http.request('http://127.0.0.1:3000/showcart?uid='+this.uid).subscribe((res:Response)=>{
+    if(window.sessionStorage.getItem('uid')){//检测是否登录
+      this.uid=parseInt(window.sessionStorage.getItem('uid'));
+      this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/showcart.php?uid='+this.uid).subscribe((res:Response)=>{
       this.cartproduct=res.json();
       });
     }else{
@@ -65,8 +65,8 @@ export class CartPage {
   //增加数量
   addproduct(cid,count){
     count++;
-    this.http.request('http://127.0.0.1:3000/updatecart?cid='+cid+'&count='+count+'&uid='+this.uid).subscribe((res:Response)=>{
-      if(res.json().status=="ok"){
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/updatecart.php?cid='+cid+'&count='+count+'&uid='+this.uid).subscribe((res:Response)=>{
+      if(res.json()==1){
         this.loaddata();
       }else{
         alert("失败");
@@ -77,8 +77,8 @@ export class CartPage {
   reduceproduct(cid,count){
     if(count>1){
       count--;
-      this.http.request('http://127.0.0.1:3000/updatecart?cid='+cid+'&count='+count+'&uid='+this.uid).subscribe((res:Response)=>{
-        if(res.json().status=="ok"){
+      this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/updatecart.php?cid='+cid+'&count='+count+'&uid='+this.uid).subscribe((res:Response)=>{
+        if(res.json()==1){
           this.loaddata();
         }else{
           alert("失败");
@@ -87,8 +87,8 @@ export class CartPage {
     }
   }
   addorder(pid,count,cid){    
-    this.http.request('http://127.0.0.1:3000/showaddress?uid='+this.uid).subscribe((res:Response)=>{
-      if(res.json().status=="bad"){//如果没有送货地址
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/user_address.php?uid='+this.uid).subscribe((res:Response)=>{
+      if(res.json()==0){//如果没有送货地址
           alert("请先写送货地址");
           this.navCtrl.push("PersonalPage");
       }else{
@@ -105,8 +105,8 @@ export class CartPage {
                 //获取的data就是用户所选的地址的aid
                 var aid=data;
                 //加入订单表并且会删除原定的购物车产品
-                this.http.request('http://127.0.0.1:3000/addorder?uid='+this.uid+'&aid='+aid+'&pid='+pid+'&count='+count).subscribe((res:Response)=>{
-                  if(res.json().status=="ok"){
+                this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/add_order.php?uid='+this.uid+'&aid='+aid+'&pid='+pid+'&count='+count).subscribe((res:Response)=>{
+                  if(res.json()==1){
                     this.deletecart(cid);//删除原来的购物车产品
                     let toast=this.toastCtrl.create({//弹出吐司购买成功
                       message:'购买成功',

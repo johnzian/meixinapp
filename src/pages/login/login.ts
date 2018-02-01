@@ -27,12 +27,12 @@ export class LoginPage {
   login():void{
     let uphone=this.uphone;
     let upwd=this.upwd;
-    let url=`http://127.0.0.1:3000/login?uphone=${uphone}&upwd=${upwd}`;
+    let url=`http://www.johnzian.cn/MeiXinApp/php/route/user_login.php?uphone=${uphone}&upwd=${upwd}`;
     this.http.request(url).subscribe((res:Response)=>{
 
       if(res.json().code==1){
-        window.localStorage.setItem('uid',res.json().uid);
-        window.localStorage.setItem('uphone',this.uphone);
+        window.sessionStorage.setItem('uid',res.json().data.uid);
+        window.sessionStorage.setItem('uphone',res.json().data.uphone);
         this.navCtrl.push('HomePage');
       }else{
         alert("登录失败")

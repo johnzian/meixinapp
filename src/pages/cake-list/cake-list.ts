@@ -23,10 +23,10 @@ export class CakeListPage {
   ionViewWillEnter(){
     //首次运行，必先运行一次函数，还有获得总页数,设定了每一页都为12个产品
     this.loaddata();
-    this.http.request('http://127.0.0.1:3000/cakelist_count').subscribe((res:Response)=>{
-      this.productcount=res.json()["COUNT(pid)"];
-      this.totalpage=Math.ceil(this.productcount/12);
-    });
+    // this.http.request('http://127.0.0.1:3000/cakelist_count').subscribe((res:Response)=>{
+    //   this.productcount=res.json()["COUNT(pid)"];
+    //   this.totalpage=Math.ceil(this.productcount/12);
+    // });
   }
   constructor(public navCtrl: NavController, public navParams: NavParams,public http:Http) {
 
@@ -35,10 +35,11 @@ export class CakeListPage {
 
   loaddata(){
     //获得分页产品的数据
-    this.http.request('http://127.0.0.1:3000/cakelist?pnum='+this.pnum).subscribe((res:Response)=>{
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/cake_list.php?pnum='+this.pnum).subscribe((res:Response)=>{
       for(let i=0;i<res.json().data.length;i++){
       this.cakes.push(res.json().data[i]);
       }
+      this.totalpage=res.json().pagecount
     });
   }
   gotodetails(pid){

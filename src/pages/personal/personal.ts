@@ -28,9 +28,9 @@ export class PersonalPage {
   //展示用户收货地址
   loaddata(){
     this.address=[];
-    if(window.localStorage.getItem('uid')){//检测是否登录
-      this.uid=parseInt(window.localStorage.getItem('uid'));
-      this.http.request('http://127.0.0.1:3000/showaddress?uid='+this.uid).subscribe((res:Response)=>{
+    if(window.sessionStorage.getItem('uid')){//检测是否登录
+      this.uid=parseInt(window.sessionStorage.getItem('uid'));
+      this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/user_address.php?uid='+this.uid).subscribe((res:Response)=>{
       this.address=res.json();
       });
     }else{
@@ -94,8 +94,8 @@ export class PersonalPage {
         {
           text: '保存',
           handler: data => {
-            this.http.request('http://127.0.0.1:3000/addaddress?uid='+this.uid+'&receiver='+data.receiver+'&province='+data.province+'&city='+data.city+'&block='+data.block+'&phone='+data.phone+'&homenumber='+data.homenumber+'&postcode='+data.postcode+'&details='+data.details).subscribe((res:Response)=>{
-              if(res.json().status=="bad"){
+            this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/add_address.php?uid='+this.uid+'&receiver='+data.receiver+'&province='+data.province+'&city='+data.city+'&block='+data.block+'&phone='+data.phone+'&homenumber='+data.homenumber+'&postcode='+data.postcode+'&details='+data.details).subscribe((res:Response)=>{
+              if(res.json()==0){
                 alert("有问题");
               }else{
                 alert("成功");

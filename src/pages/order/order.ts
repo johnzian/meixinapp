@@ -28,9 +28,9 @@ export class OrderPage {
   }
   loaddata(){
     this.orders=[];
-    if(window.localStorage.getItem('uid')){//检测是否登录
-      this.uid=parseInt(window.localStorage.getItem('uid'));
-      this.http.request('http://127.0.0.1:3000/showorder?uid='+this.uid).subscribe((res:Response)=>{
+    if(window.sessionStorage.getItem('uid')){//检测是否登录
+      this.uid=parseInt(window.sessionStorage.getItem('uid'));
+      this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/get_order.php?uid='+this.uid).subscribe((res:Response)=>{
       this.orders=res.json();
       });
     }else{

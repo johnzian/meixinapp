@@ -38,9 +38,9 @@ export class RegisterPage {
   register():void{
     let uphone=this.uphone;
     let upwd=this.upwd;
-    let url=`http://127.0.0.1:3000/register?uphone=${uphone}&upwd=${upwd}`;
+    let url=`http://www.johnzian.cn/MeiXinApp/php/route/user_register.php?uphone=${uphone}&upwd=${upwd}`;
     this.http.request(url).subscribe((res:Response)=>{
-      if(res.json().status=="ok"){
+      if(res.json()==1){
         this.showtoast();
         this.navCtrl.push('LoginPage');
       }else{

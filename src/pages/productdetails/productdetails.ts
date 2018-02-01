@@ -25,12 +25,12 @@ export class ProductdetailsPage {
 
   ionViewWillEnter(){
     //获得产品详情
-    this.http.request('http://127.0.0.1:3000/getproduct?pid='+this.pid).subscribe((res:Response)=>{
-      this.productdetails=(res.json()[0]);
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/getproductbyid.php?pid='+this.pid).subscribe((res:Response)=>{
+      this.productdetails=(res.json());
     });
     //检测是否登录
-    if(window.localStorage.getItem('uid')){
-      this.uid=parseInt(window.localStorage.getItem('uid'));
+    if(window.sessionStorage.getItem('uid')){
+      this.uid=parseInt(window.sessionStorage.getItem('uid'));
     }
   }
   ionViewDidLoad() {
@@ -42,9 +42,9 @@ export class ProductdetailsPage {
       if(!isNaN(count)){//检测是否为数字类型
         let uid=this.uid;
         let pid=this.pid;
-        let url=`http://127.0.0.1:3000/addcart?uid=${uid}&pid=${pid}&count=${count}`;
+        let url=`http://www.johnzian.cn/MeiXinApp/php/route/add_cart.php?uid=${uid}&pid=${pid}&count=${count}`;
         this.http.request(url).subscribe((res:Response)=>{
-          if(res.json().status=="ok"){
+          if(res.json()==1){
             let alert = this.alertCtrl.create({
               title: '加入购物车成功',
               buttons: [

@@ -20,16 +20,16 @@ export class HomePage {
   uphone="";
   uid=0;
   ionViewWillEnter(){
-    this.http.request('http://127.0.0.1:3000/indexproduct').subscribe((res:Response)=>{//首页产品载入
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/index_cake.php').subscribe((res:Response)=>{//首页产品载入
       this.indexproduct=res.json();
     });
-    this.http.request('http://127.0.0.1:3000/lunbo').subscribe((res:Response)=>{//轮播载入
+    this.http.request('http://www.johnzian.cn/MeiXinApp/php/route/index_lunbo.php').subscribe((res:Response)=>{//轮播载入
       this.indexlunbo=res.json();
       this.len=this.indexlunbo.length;
     });
-    if(window.localStorage.getItem('uid')){//检测是否有登录
-      this.uid=parseInt(window.localStorage.getItem('uid'));
-      this.uphone=window.localStorage.getItem('uphone');
+    if(window.sessionStorage.getItem('uid')){//检测是否有登录
+      this.uid=parseInt(window.sessionStorage.getItem('uid'));
+      this.uphone=window.sessionStorage.getItem('uphone');
       this.mylogin=true;
     }
     // this.http.request('http://127.0.0.1:3000/islogin').subscribe((res:Response)=>{
