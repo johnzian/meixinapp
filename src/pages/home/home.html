@@ -10,7 +10,7 @@
   <ion-list>
     <!--logo-->
     <ion-item  style="padding: 0">
-      <img src="../../assets/imgs/201707181448325969790.jpg" alt=""/>
+      <img src="assets/imgs/201707181448325969790.jpg" alt=""/>
       <div>
         <ion-item *ngIf='!mylogin'>
         <button ion-button style="float: right; background: #e16300;" (click)="pushPage('LoginPage')" *ngIf='!mylogin'>登录</button>
@@ -30,7 +30,7 @@
 
         <ion-slide *ngFor="let key of indexlunbo">
           <button block class="lunbo" (click)="gotodetails(key.pid)">
-            <img src="../../assets/imgs/{{key.superimg}}" alt=""/>
+            <img src="assets/imgs/{{key.superimg}}" alt=""/>
           </button>
         </ion-slide>
       </ion-slides>
@@ -59,7 +59,7 @@
 
     <!--商品卡片展示-->
       <ion-card *ngFor="let key of indexproduct">
-        <img src="../../assets/imgs/{{key.limg}}"/>
+        <img src="assets/imgs/{{key.limg}}"/>
         <ion-card-content>
           <ion-card-title>
             {{key.title}}
